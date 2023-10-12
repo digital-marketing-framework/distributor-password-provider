@@ -1,8 +1,8 @@
 <?php
 
-namespace DigitalMarketingFramework\Distributor\Password\Utility;
+namespace DigitalMarketingFramework\Distributor\PasswordProvider\Utility;
 
-use DigitalMarketingFramework\Distributor\Password\Service\RandomNumberGeneratorInterface;
+use DigitalMarketingFramework\Distributor\PasswordProvider\Service\RandomNumberGeneratorInterface;
 
 class PasswordUtility
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace DigitalMarketingFramework\Distributor\Password\Service;
+namespace DigitalMarketingFramework\Distributor\PasswordProvider\Service;
 
-use DigitalMarketingFramework\Distributor\Password\Utility\PasswordUtility;
+use DigitalMarketingFramework\Distributor\PasswordProvider\Utility\PasswordUtility;
 
 class PasswordGenerator implements PasswordGeneratorInterface
 {

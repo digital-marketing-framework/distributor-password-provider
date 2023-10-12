@@ -1,11 +1,11 @@
 <?php
 
-namespace DigitalMarketingFramework\Distributor\Password;
+namespace DigitalMarketingFramework\Distributor\PasswordProvider;
 
 use DigitalMarketingFramework\Core\Initialization;
 use DigitalMarketingFramework\Core\Registry\RegistryDomain;
 use DigitalMarketingFramework\Distributor\Core\DataProvider\DataProviderInterface;
-use DigitalMarketingFramework\Distributor\Password\DataProvider\PasswordDataProvider;
+use DigitalMarketingFramework\Distributor\PasswordProvider\DataProvider\PasswordDataProvider;
 
 class DistributorPasswordInitialization extends Initialization
 {

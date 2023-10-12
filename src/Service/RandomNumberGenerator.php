@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalMarketingFramework\Distributor\Password\\Service;
+namespace DigitalMarketingFramework\Distributor\PasswordProvider\Service;
 
 use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
 

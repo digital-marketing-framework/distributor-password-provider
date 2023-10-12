@@ -1,13 +1,13 @@
 <?php
 
-namespace DigitalMarketingFramework\Distributor\Password\DataProvider;
+namespace DigitalMarketingFramework\Distributor\PasswordProvider\DataProvider;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\Custom\ValueSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\CustomSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\MapSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\SchemaInterface;
 use DigitalMarketingFramework\Distributor\Core\DataProvider\DataProvider;
-use DigitalMarketingFramework\Distributor\Password\Service\PasswordService;
+use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PasswordDataProvider extends DataProvider implements DataProcessorAwareInterface
