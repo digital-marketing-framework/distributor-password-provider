@@ -1,0 +1,45 @@
+{
+    "name": "digital-marketing-framework/distributor-password-provider",
+    "description": "Data Provider for generated Passwords.",
+    "license": "GPL-2.0-or-later",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "form",
+        "data",
+        "submission",
+        "relay",
+        "formhandler"
+    ],
+    "authors": [
+        {
+            "name": "Mediatis AG",
+            "email": "info@mediatis.de",
+            "homepage": "https://www.mediatis.de",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://www.mediatis.de",
+    "require": {
+        "php": "^8.1",
+        "digital-marketing-framework/distributor-core": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DigitalMarketingFramework\\Distributor\\PasswordProvider\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DigitalMarketingFramework\\Core\\Tests\\": "vendor/digital-marketing-framework/core/tests/",
+            "DigitalMarketingFramework\\Distributor\\Core\\Tests\\": "vendor/digital-marketing-framework/distributor-core/tests/",
+            "DigitalMarketingFramework\\Distributor\\PasswordProvider\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
+        "sort-packages": true
+    }
+}
