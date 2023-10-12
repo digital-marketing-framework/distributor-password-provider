@@ -6,11 +6,13 @@ use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\C
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\CustomSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\MapSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\SchemaInterface;
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\StringSchema;
+use DigitalMarketingFramework\Core\Context\ContextInterface;
 use DigitalMarketingFramework\Distributor\Core\DataProvider\DataProvider;
-use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordService;
+use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordGenerator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class PasswordDataProvider extends DataProvider implements DataProcessorAwareInterface
+class PasswordDataProvider extends DataProvider
 {
     public const KEY_PASSWORDS = 'passwords';
     public const DEFAULT_PASSWORDS = [
@@ -21,29 +23,29 @@ class PasswordDataProvider extends DataProvider implements DataProcessorAwareInt
         ],
     ];
     
-    /** @var PasswordGeneratorInterface */
-    protected $passwordGenerator;
-    
-    public function __construct(ClassRegistryInterface $registry, LoggerInterface $logger, ?PasswordGeneratorInterface $passwordGenerator = null)
-    {
-        parent::__construct($registry, $logger);
-        $this->passwordGenerator = $passwordGenerator ?? new PasswordGenerator();
+    public function __construct(
+        string $keyword,
+        RegistryInterface $registry,
+        SubmissionDataSetInterface $submission,
+        protected PasswordGenerator $passwordGenerator
+    ) {
+        parent::__construct($keyword, $registry, $submission);
     }
     
     protected function processContext(ContextInterface $context): void
     {
-        $passwords = $this->getConfig(static::KEY_PASSWORDS);
+        $passwords = $this->getMapConfig(static::KEY_PASSWORDS);
         foreach($passwords as $field => $generatorOptions) {
             $password = $this->passwordGenerator->generate(
                 $generatorOptions
             );
-            $submission->getContext()['passwords'][$field] = $password;
+            $this->submission->getContext()['passwords'][$field] = $password;
         }
     }
     
-    protected function process(SubmissionInterface $submission): void
+    protected function process(): void
     {
-        foreach($submission->getContext()['passwords'] as $field => $password) {
+        foreach($this->submission->getContext()['passwords'] as $field => $password) {
             $this->setField($submission, $field, $password);
         }
     }
