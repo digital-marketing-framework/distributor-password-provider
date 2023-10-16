@@ -9,16 +9,27 @@ use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\S
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\StringSchema;
 use DigitalMarketingFramework\Core\Context\ContextInterface;
 use DigitalMarketingFramework\Distributor\Core\DataProvider\DataProvider;
+use DigitalMarketingFramework\Distributor\Core\Model\DataSet\SubmissionDataSetInterface;
+use DigitalMarketingFramework\Distributor\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordGenerator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PasswordDataProvider extends DataProvider
-{   
+{
+    public const KEY_FIELD = 'field';
+
+    public const DEFAULT_FIELD = 'password';
+
     public const KEY_MIN_LENGTH = 'minLength';
+
     public const DEFAULT_MIN_LENGTH = 8;
+
     public const KEY_MAX_LENGTH = 'maxLength';
+
     public const DEFAULT_MAX_LENGTH = 12;
+
     public const KEY_ALPHABETS = 'alphabets';
+
     public const DEFAULT_ALPHABETS = [
         [
             'alphabet' => 'abcdefghijklmnopqrstuvwxyz',
@@ -49,25 +60,22 @@ class PasswordDataProvider extends DataProvider
     
     protected function processContext(ContextInterface $context): void
     {
-        $passwords = $this->getMapConfig(static::KEY_PASSWORDS);
-        foreach($passwords as $field => $generatorOptions) {
-            $password = $this->passwordGenerator->generate(
-                $generatorOptions
-            );
-            $this->submission->getContext()['passwords'][$field] = $password;
-        }
     }
     
     protected function process(): void
     {
-        foreach($this->submission->getContext()['passwords'] as $field => $password) {
-            $this->setField($submission, $field, $password);
-        }
+        $password = $this->passwordGenerator->generate(
+            $this->getConfig(static::KEY_MIN_LENGTH),
+            $this->getConfig(static::KEY_MAX_LENGTH),
+            $this->getListConfig(static::KEY_ALPHABETS)
+        );
+        $this->setField($this->getConfig(static::KEY_FIELD), $password);
     }
     
     public static function getSchema(): SchemaInterface
     {
         $schema = parent::getSchema();
+        $schema->addProperty(static::KEY_FIELD, new StringSchema(static::DEFAULT_FIELD));
         $schema->addProperty(static::KEY_MIN_LENGTH, new IntegerSchema(static::DEFAULT_MIN_LENGTH));
         $schema->addProperty(static::KEY_MAX_LENGTH, new IntegerSchema(static::DEFAULT_MAX_LENGTH));
         
@@ -75,7 +83,7 @@ class PasswordDataProvider extends DataProvider
         $alphabetSchema->addProperty('alphabet', new StringSchema());
         $alphabetSchema->addProperty('min', new IntegerSchema());
         $alphabetListSchema = new ListSchema($alphabetSchema);
-        $alphabetListSchema->setDefaultValue(static::DEFAULT_ALPHABETS);
+        //$alphabetListSchema->setDefaultValue(static::DEFAULT_ALPHABETS); TODO aus yaml?
         $schema->addProperty(static::KEY_ALPHABETS, $alphabetListSchema);
         
         return $schema;

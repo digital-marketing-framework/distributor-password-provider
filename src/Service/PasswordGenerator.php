@@ -6,16 +6,6 @@ use DigitalMarketingFramework\Distributor\PasswordProvider\Utility\PasswordUtili
 
 class PasswordGenerator implements PasswordGeneratorInterface
 {
-    public const DEFAULT_MIN_LENGTH = 8;
-    public const DEFAULT_MAX_LENGTH = 12;
-
-    public const DEFAULT_ALPHABETS = [
-        'abcdefghijklmnopqrstuvwxyz',
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        '0123456789',
-        '!#%&/(){}[]+-',
-    ];
-
     /** @var RandomNumberGeneratorInterface */
     protected $rng;
 
@@ -54,32 +44,13 @@ class PasswordGenerator implements PasswordGeneratorInterface
     }
 
     /**
-     * @return array<int, array<string, mixed>>
-     */
-    public static function getDefaultAlphabetOptions(): array
-    {
-        $options = [];
-        foreach (static::DEFAULT_ALPHABETS as $alphabet) {
-            $options[] = [
-                'alphabet' => $alphabet,
-                'min' => 0,
-            ];
-        }
-        return $options;
-    }
-
-    /**
-     * @param array<mixed> $options
+     * @param string $minLength
+     * @param string $minLength
+     * @param array<mixed> $alphabetOptions
      * @return string
      */
-    public function generate(array $options = []): string
+    public function generate($minLength, $maxLength, $alphabetOptions = []): string
     {
-        $minLength = $options['minLength'] ?? static::DEFAULT_MIN_LENGTH;
-        $maxLength = $options['maxLength'] ?? static::DEFAULT_MAX_LENGTH;
-        $alphabetOptions = isset($options['alphabetOptions']) && !empty($options['alphabetOptions'])
-            ? $options['alphabetOptions']
-            : static::getDefaultAlphabetOptions();
-
         $this->init($minLength, $maxLength);
 
         $allAlphabets = '';
