@@ -2,9 +2,9 @@
 
 namespace DigitalMarketingFramework\Distributor\PasswordProvider\DataProvider;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\Custom\ValueSchema;
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\CustomSchema;
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\MapSchema;
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\ContainerSchema;
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\IntegerSchema;
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\ListSchema;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\SchemaInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\Schema\StringSchema;
 use DigitalMarketingFramework\Core\Context\ContextInterface;
@@ -13,13 +13,28 @@ use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordGener
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PasswordDataProvider extends DataProvider
-{
-    public const KEY_PASSWORDS = 'passwords';
-    public const DEFAULT_PASSWORDS = [
-        'password' => [
-            'minLength' => 8,
-            'maxLength' => 12,
-            'alphabetOptions' => [],
+{   
+    public const KEY_MIN_LENGTH = 'minLength';
+    public const DEFAULT_MIN_LENGTH = 8;
+    public const KEY_MAX_LENGTH = 'maxLength';
+    public const DEFAULT_MAX_LENGTH = 12;
+    public const KEY_ALPHABETS = 'alphabets';
+    public const DEFAULT_ALPHABETS = [
+        [
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyz',
+            'min' => 0,
+        ],
+        [
+            'alphabet' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'min' => 0,
+        ],
+        [
+            'alphabet' => '0123456789',
+            'min' => 0,
+        ],
+        [
+            'alphabet' => '!#%&/(){}[]+-',
+            'min' => 0,
         ],
     ];
     
@@ -53,8 +68,16 @@ class PasswordDataProvider extends DataProvider
     public static function getSchema(): SchemaInterface
     {
         $schema = parent::getSchema();
-        $schema->addProperty(static::KEY_PASSWORDS, new MapSchema(new CustomSchema(ValueSchema::TYPE), new StringSchema('mapKey'), static::DEFAULT_PASSWORDS));
-    
+        $schema->addProperty(static::KEY_MIN_LENGTH, new IntegerSchema(static::DEFAULT_MIN_LENGTH));
+        $schema->addProperty(static::KEY_MAX_LENGTH, new IntegerSchema(static::DEFAULT_MAX_LENGTH));
+        
+        $alphabetSchema = new ContainerSchema();
+        $alphabetSchema->addProperty('alphabet', new StringSchema());
+        $alphabetSchema->addProperty('min', new IntegerSchema());
+        $alphabetListSchema = new ListSchema($alphabetSchema);
+        $alphabetListSchema->setDefaultValue(static::DEFAULT_ALPHABETS);
+        $schema->addProperty(static::KEY_ALPHABETS, $alphabetListSchema);
+        
         return $schema;
     }
 }
