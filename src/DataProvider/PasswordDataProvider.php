@@ -29,25 +29,6 @@ class PasswordDataProvider extends DataProvider
     public const DEFAULT_MAX_LENGTH = 12;
 
     public const KEY_ALPHABETS = 'alphabets';
-
-    public const DEFAULT_ALPHABETS = [
-        [
-            'alphabet' => 'abcdefghijklmnopqrstuvwxyz',
-            'min' => 0,
-        ],
-        [
-            'alphabet' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            'min' => 0,
-        ],
-        [
-            'alphabet' => '0123456789',
-            'min' => 0,
-        ],
-        [
-            'alphabet' => '!#%&/(){}[]+-',
-            'min' => 0,
-        ],
-    ];
     
     public function __construct(
         string $keyword,
@@ -83,7 +64,6 @@ class PasswordDataProvider extends DataProvider
         $alphabetSchema->addProperty('alphabet', new StringSchema());
         $alphabetSchema->addProperty('min', new IntegerSchema());
         $alphabetListSchema = new ListSchema($alphabetSchema);
-        //$alphabetListSchema->setDefaultValue(static::DEFAULT_ALPHABETS); TODO aus yaml?
         $schema->addProperty(static::KEY_ALPHABETS, $alphabetListSchema);
         
         return $schema;
