@@ -12,7 +12,6 @@ use DigitalMarketingFramework\Distributor\Core\DataProvider\DataProvider;
 use DigitalMarketingFramework\Distributor\Core\Model\DataSet\SubmissionDataSetInterface;
 use DigitalMarketingFramework\Distributor\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Distributor\PasswordProvider\Service\PasswordGenerator;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PasswordDataProvider extends DataProvider
 {
@@ -29,7 +28,7 @@ class PasswordDataProvider extends DataProvider
     public const DEFAULT_MAX_LENGTH = 12;
 
     public const KEY_ALPHABETS = 'alphabets';
-    
+
     public function __construct(
         string $keyword,
         RegistryInterface $registry,
@@ -38,11 +37,11 @@ class PasswordDataProvider extends DataProvider
     ) {
         parent::__construct($keyword, $registry, $submission);
     }
-    
+
     protected function processContext(ContextInterface $context): void
     {
     }
-    
+
     protected function process(): void
     {
         $password = $this->passwordGenerator->generate(
@@ -52,20 +51,22 @@ class PasswordDataProvider extends DataProvider
         );
         $this->setField($this->getConfig(static::KEY_FIELD), $password);
     }
-    
+
     public static function getSchema(): SchemaInterface
     {
+        /** @var ContainerSchema */
         $schema = parent::getSchema();
         $schema->addProperty(static::KEY_FIELD, new StringSchema(static::DEFAULT_FIELD));
         $schema->addProperty(static::KEY_MIN_LENGTH, new IntegerSchema(static::DEFAULT_MIN_LENGTH));
         $schema->addProperty(static::KEY_MAX_LENGTH, new IntegerSchema(static::DEFAULT_MAX_LENGTH));
-        
+
         $alphabetSchema = new ContainerSchema();
         $alphabetSchema->addProperty('alphabet', new StringSchema());
         $alphabetSchema->addProperty('min', new IntegerSchema());
+
         $alphabetListSchema = new ListSchema($alphabetSchema);
         $schema->addProperty(static::KEY_ALPHABETS, $alphabetListSchema);
-        
+
         return $schema;
     }
 }

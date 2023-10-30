@@ -5,10 +5,7 @@ namespace DigitalMarketingFramework\Distributor\PasswordProvider\Service;
 interface PasswordGeneratorInterface
 {
     /**
-     * @param string $minLength
-     * @param string $minLength
-     * @param array<mixed> $alphabetOptions
-     * @return string
+     * @param array<array{alphabet:string,min:int}> $alphabetOptions
      */
-    public function generate($minLength, $maxLength, $alphabetOptions = []): string;
+    public function generate(int $minLength, int $maxLength, array $alphabetOptions = []): string;
 }

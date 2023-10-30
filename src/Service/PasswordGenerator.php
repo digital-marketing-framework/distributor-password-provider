@@ -6,18 +6,14 @@ use DigitalMarketingFramework\Distributor\PasswordProvider\Utility\PasswordUtili
 
 class PasswordGenerator implements PasswordGeneratorInterface
 {
-    /** @var RandomNumberGeneratorInterface */
-    protected $rng;
-
     /** @var array<int> */
-    protected $passwordIndices;
+    protected array $passwordIndices = [];
 
     /** @var array<string> */
-    protected $password;
+    protected array $password = [];
 
-    public function __construct(?RandomNumberGeneratorInterface $rng = null)
+    public function __construct(protected RandomNumberGeneratorInterface $rng = new RandomNumberGenerator())
     {
-        $this->rng = $rng ?? new RandomNumberGenerator();
     }
 
     protected function init(int $minLength, int $maxLength): int
@@ -25,6 +21,7 @@ class PasswordGenerator implements PasswordGeneratorInterface
         $length = $this->rng->generate($minLength, $maxLength);
         $this->password = array_fill(0, $length, '');
         $this->passwordIndices = PasswordUtility::shuffleArray($this->rng, array_keys($this->password));
+
         return $length;
     }
 
@@ -33,34 +30,34 @@ class PasswordGenerator implements PasswordGeneratorInterface
         $index = array_shift($this->passwordIndices);
         if ($index !== null) {
             $this->password[$index] = $character;
+
             return true;
         }
+
         return false;
     }
 
     protected function moreCharactersNeeded(): bool
     {
-        return count($this->passwordIndices) > 0;
+        return $this->passwordIndices !== [];
     }
 
     /**
-     * @param string $minLength
-     * @param string $minLength
-     * @param array<mixed> $alphabetOptions
-     * @return string
+     * @param array<array{alphabet:string,min:int}> $alphabetOptions
      */
-    public function generate($minLength, $maxLength, $alphabetOptions = []): string
+    public function generate(int $minLength, int $maxLength, array $alphabetOptions = []): string
     {
         $this->init($minLength, $maxLength);
 
         $allAlphabets = '';
-        foreach ($alphabetOptions as $key => $alphabetOption) {
-            $alphabet = is_string($alphabetOption) ? $alphabetOption : $alphabetOption['alphabet'];
-            $min = is_string($alphabetOption) ? 0 : $alphabetOption['min'];
+        foreach ($alphabetOptions as $alphabetOption) {
+            $alphabet = $alphabetOption['alphabet'];
+            $min = $alphabetOption['min'];
             while ($min > 0) {
                 $this->addCharacter(PasswordUtility::getRandomCharacter($this->rng, $alphabet));
-                $min--;
+                --$min;
             }
+
             $allAlphabets .= $alphabet;
         }
 

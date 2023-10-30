@@ -7,30 +7,28 @@ use DigitalMarketingFramework\Distributor\PasswordProvider\Service\RandomNumberG
 class PasswordUtility
 {
     /**
-     * @param RandomNumberGeneratorInterface $rng
      * @param array<int, int|string> $array
+     *
      * @return array<int|string>
      */
     public static function shuffleArray(RandomNumberGeneratorInterface $rng, array $array): array
     {
         $result = [];
-        while (count($array) > 0) {
+        while ($array !== []) {
             $array = array_values($array);
             $index = $rng->generate(0, count($array) - 1);
             $result[] = $array[$index];
             unset($array[$index]);
         }
+
         return $result;
     }
 
     public static function shuffleString(RandomNumberGeneratorInterface $rng, string $string): string
     {
-        if (function_exists('mb_str_split')) {
-            $input = mb_str_split($string);
-        } else {
-            $input = str_split($string);
-        }
+        $input = function_exists('mb_str_split') ? mb_str_split($string) : str_split($string);
         $result = static::shuffleArray($rng, $input);
+
         return implode('', $result);
     }
 
@@ -42,9 +40,10 @@ class PasswordUtility
     public static function generateRandomString(RandomNumberGeneratorInterface $rng, int $length, string $alphabet): string
     {
         $result = '';
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $result .= static::getRandomCharacter($rng, $alphabet);
         }
+
         return $result;
     }
 }

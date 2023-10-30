@@ -3,6 +3,7 @@
 namespace DigitalMarketingFramework\Distributor\PasswordProvider\Service;
 
 use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
+use Exception;
 
 class RandomNumberGenerator implements RandomNumberGeneratorInterface
 {
@@ -10,7 +11,7 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
     {
         try {
             return random_int($min, $max);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new DigitalMarketingFrameworkException($e->getMessage(), $e->getCode(), $e);
         }
     }

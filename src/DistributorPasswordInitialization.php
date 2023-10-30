@@ -21,11 +21,11 @@ class DistributorPasswordInitialization extends Initialization
 
     protected const SCHEMA_MIGRATIONS = [];
 
-    public function __construct()
+    public function __construct(string $packageAlias = '')
     {
-        parent::__construct('distributor-password-provider', '1.0.0');
+        parent::__construct('distributor-password-provider', '1.0.0', $packageAlias);
     }
-    
+
     protected function getAdditionalPluginArguments(string $interface, string $pluginClass, RegistryInterface $registry): array
     {
         if ($pluginClass === PasswordDataProvider::class) {
