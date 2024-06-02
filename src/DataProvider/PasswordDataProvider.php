@@ -2,7 +2,6 @@
 
 namespace DigitalMarketingFramework\Distributor\PasswordProvider\DataProvider;
 
-use DigitalMarketingFramework\Core\Context\ContextInterface;
 use DigitalMarketingFramework\Core\Context\WriteableContextInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\IntegerSchema;
