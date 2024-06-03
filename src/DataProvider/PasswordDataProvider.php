@@ -2,7 +2,7 @@
 
 namespace DigitalMarketingFramework\Distributor\PasswordProvider\DataProvider;
 
-use DigitalMarketingFramework\Core\Context\ContextInterface;
+use DigitalMarketingFramework\Core\Context\WriteableContextInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\IntegerSchema;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ListSchema;
@@ -42,7 +42,7 @@ class PasswordDataProvider extends DataProvider
         parent::__construct($keyword, $registry, $submission);
     }
 
-    protected function processContext(ContextInterface $context): void
+    protected function processContext(WriteableContextInterface $context): void
     {
         $passwords = [];
         foreach ($this->getListConfig(static::KEY_FIELDS) as $field) {
@@ -57,12 +57,12 @@ class PasswordDataProvider extends DataProvider
             );
         }
 
-        $this->submission->getContext()[self::KEY_PASSWORDS_CONTEXT] = $passwords;
+        $context[self::KEY_PASSWORDS_CONTEXT] = $passwords;
     }
 
     protected function process(): void
     {
-        $passwords = $this->submission->getContext()[self::KEY_PASSWORDS_CONTEXT];
+        $passwords = $this->context[self::KEY_PASSWORDS_CONTEXT] ?? [];
         foreach ($passwords as $field => $password) {
             $this->setField($field, $password);
         }
